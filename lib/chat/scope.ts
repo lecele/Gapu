@@ -36,7 +36,7 @@ export const OUT_OF_SCOPE_RESPONSE =
  */
 const OUT_OF_SCOPE_TOPICS: Array<{ label: string; pattern: RegExp }> = [
   { label: 'pediatria', pattern: /\b(?:pediatri\w*|neonat\w*|puericultura|lactente|lactentes|recem[- ]nascidos?|bebes?|criancas?)\b/ },
-  { label: 'obstetricia', pattern: /\b(?:obstetri\w*|gestante|gestantes|gravidas?|gravidez|gestacao|puerperi\w*|pre[- ]?natal|parturiente)\b/ },
+  { label: 'obstetricia', pattern: /\b(?:obstetri\w*|gestante|gestantes|gravidas?|gravidez|gestacao|puerperi\w*|pre[- ]?natal|parturiente|partos?)\b/ },
   { label: 'atencao primaria', pattern: /\b(?:atencao primaria|atencao basica|estrategia saude da familia|unidade basica de saude)\b/ },
 ];
 
