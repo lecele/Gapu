@@ -443,16 +443,6 @@
     "reference_verified": true,
     "reference_key": "1gu0sH0qoUa1kVbqtv0-Zz33OC4vvSEYD"
   },
-  "1rsAmg3UK8m_2fP4STqoiB_Zhyktnlw-W": {
-    "reference_title": "Brunner & Suddarth: Tratado de enfermagem médico-cirúrgica",
-    "reference_author": "Lillian Sholtis Brunner; Doris Smith Suddarth; Suzanne C. Smeltzer (ed.)",
-    "reference_year": "2014",
-    "reference_edition": "12ª ed. [reimpr.]",
-    "reference_publisher": "Rio de Janeiro: Guanabara Koogan",
-    "reference_source": "catalog",
-    "reference_verified": true,
-    "reference_key": "1rsAmg3UK8m_2fP4STqoiB_Zhyktnlw-W"
-  },
   "1YUfjf2WG5FonQaOImCsAY6aHSuyK7XNL": {
     "reference_title": "Práticas Recomendadas SOBECC",
     "reference_year": "2013",
@@ -753,51 +743,293 @@
   },
   "1-5n8Jt_rfg7VBwL0pA_Fn0tV--9Xywop": {
     "reference_title": "Appropriate use of silver dressings in wounds: an expert working group consensus",
-    "reference_author": "Lisa MacGregor (ed.)", "reference_year": "2012", "reference_publisher": "Wounds International", "reference_source": "catalog", "reference_verified": true, "reference_key": "1-5n8Jt_rfg7VBwL0pA_Fn0tV--9Xywop"
+    "reference_author": "Lisa MacGregor (ed.)",
+    "reference_year": "2012",
+    "reference_publisher": "Wounds International",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1-5n8Jt_rfg7VBwL0pA_Fn0tV--9Xywop"
   },
   "11yYTHeY94hOPFBZaB2Zlt2Wiw2qxVuX4": {
-    "reference_title": "A importância dos cuidados de enfermagem no período pré-operatório", "reference_author": "Cátia Cilene dos Santos Nascimento; Marcelo dos Santos Nascimento", "reference_year": "2023", "reference_publisher": "Revista Eletrônica Multidisciplinar de Investigação Científica, 5(2), 18–32", "reference_source": "catalog", "reference_verified": true, "reference_key": "11yYTHeY94hOPFBZaB2Zlt2Wiw2qxVuX4"
+    "reference_title": "A importância dos cuidados de enfermagem no período pré-operatório",
+    "reference_author": "Cátia Cilene dos Santos Nascimento; Marcelo dos Santos Nascimento",
+    "reference_year": "2023",
+    "reference_publisher": "Revista Eletrônica Multidisciplinar de Investigação Científica, 5(2), 18–32",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "11yYTHeY94hOPFBZaB2Zlt2Wiw2qxVuX4"
   },
   "12F8539ZNtvLtx5nGmPOtUPJ6clbVvNJU": {
-    "reference_title": "Principais recomendações em cuidados pré-operatórios", "reference_author": "Josiani dos Santos Garcez; Liane Carvalho de Brito de Sousa; Maria Barreto Novais Neta; Flávio Lobo Maia; Fernanda Paula Cavalcante Araújo", "reference_year": "2019", "reference_publisher": "Revista de Medicina da UFC, 59(1), 53–60", "reference_source": "catalog", "reference_verified": true, "reference_key": "12F8539ZNtvLtx5nGmPOtUPJ6clbVvNJU"
+    "reference_title": "Principais recomendações em cuidados pré-operatórios",
+    "reference_author": "Josiani dos Santos Garcez; Liane Carvalho de Brito de Sousa; Maria Barreto Novais Neta; Flávio Lobo Maia; Fernanda Paula Cavalcante Araújo",
+    "reference_year": "2019",
+    "reference_publisher": "Revista de Medicina da UFC, 59(1), 53–60",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "12F8539ZNtvLtx5nGmPOtUPJ6clbVvNJU"
   },
   "1ajbzLqRKBfhN6X2Dz1yIJyWVc1JQ2Hw8": {
-    "reference_title": "Avaliação da dor pós-operatória sob a ótica do enfermeiro", "reference_author": "Amanda Tavares Xavier; Maysa Kelly de Lima; Tâmara Mayara Rodrigues Burgos; Maria da Conceição Cavalcanti de Lira; Solange Queiroga Serrano", "reference_year": "2018", "reference_publisher": "Revista de Enfermagem UFPE on line, 12(9), 2436–2441", "reference_source": "catalog", "reference_verified": true, "reference_key": "1ajbzLqRKBfhN6X2Dz1yIJyWVc1JQ2Hw8"
+    "reference_title": "Avaliação da dor pós-operatória sob a ótica do enfermeiro",
+    "reference_author": "Amanda Tavares Xavier; Maysa Kelly de Lima; Tâmara Mayara Rodrigues Burgos; Maria da Conceição Cavalcanti de Lira; Solange Queiroga Serrano",
+    "reference_year": "2018",
+    "reference_publisher": "Revista de Enfermagem UFPE on line, 12(9), 2436–2441",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1ajbzLqRKBfhN6X2Dz1yIJyWVc1JQ2Hw8"
   },
   "1CIiqKR9iSXmJhaK_EiIc_zNjJCEBWEWB": {
-    "reference_title": "Perioperative care of the obese patient", "reference_author": "M. Carron; B. Safaee Fakhr; G. Ieppariello; M. Foletto", "reference_year": "2020", "reference_publisher": "British Journal of Surgery, 107(2), e39", "reference_source": "catalog", "reference_verified": true, "reference_key": "1CIiqKR9iSXmJhaK_EiIc_zNjJCEBWEWB"
+    "reference_title": "Perioperative care of the obese patient",
+    "reference_author": "M. Carron; B. Safaee Fakhr; G. Ieppariello; M. Foletto",
+    "reference_year": "2020",
+    "reference_publisher": "British Journal of Surgery, 107(2), e39",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1CIiqKR9iSXmJhaK_EiIc_zNjJCEBWEWB"
   },
   "1K2z5fV3W0HpnI8qlic6VSDEf0zS86jLv": {
-    "reference_title": "Causes and consequences of inadequate management of acute pain", "reference_author": "Raymond Sinatra", "reference_year": "2010", "reference_publisher": "Pain Medicine, 11, 1859–1871, Wiley Periodicals", "reference_source": "catalog", "reference_verified": true, "reference_key": "1K2z5fV3W0HpnI8qlic6VSDEf0zS86jLv"
+    "reference_title": "Causes and consequences of inadequate management of acute pain",
+    "reference_author": "Raymond Sinatra",
+    "reference_year": "2010",
+    "reference_publisher": "Pain Medicine, 11, 1859–1871, Wiley Periodicals",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1K2z5fV3W0HpnI8qlic6VSDEf0zS86jLv"
   },
   "1UcXuZBX8B_e2GvymQHqisVur3Fryddx7": {
-    "reference_title": "Intervenções de enfermagem para o manejo da dor aguda na sala de recuperação pós-anestésica: revisão de escopo", "reference_author": "Giulia Moreira Dias; Elizabete Cristina de Lira Santiago; Mani Indiana Funez", "reference_year": "2025", "reference_publisher": "BrJP, 8, e20250043", "reference_source": "catalog", "reference_verified": true, "reference_key": "1UcXuZBX8B_e2GvymQHqisVur3Fryddx7"
+    "reference_title": "Intervenções de enfermagem para o manejo da dor aguda na sala de recuperação pós-anestésica: revisão de escopo",
+    "reference_author": "Giulia Moreira Dias; Elizabete Cristina de Lira Santiago; Mani Indiana Funez",
+    "reference_year": "2025",
+    "reference_publisher": "BrJP, 8, e20250043",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1UcXuZBX8B_e2GvymQHqisVur3Fryddx7"
   },
   "1uFP54kMLDB4hpJ22P-eb-Y3IrhQ3vyz2": {
-    "reference_title": "Cancer pain relief: with a guide to opioid availability", "reference_year": "1996", "reference_edition": "2nd ed.", "reference_publisher": "World Health Organization, Geneva", "reference_source": "catalog", "reference_verified": true, "reference_key": "1uFP54kMLDB4hpJ22P-eb-Y3IrhQ3vyz2"
+    "reference_title": "Cancer pain relief: with a guide to opioid availability",
+    "reference_year": "1996",
+    "reference_edition": "2nd ed.",
+    "reference_publisher": "World Health Organization, Geneva",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1uFP54kMLDB4hpJ22P-eb-Y3IrhQ3vyz2"
   },
   "1v5cEFXfyIsZqYz7mVijoZm3seGx69pC3": {
-    "reference_title": "Resolução RDC nº 15, de 15 de março de 2012: boas práticas para o processamento de produtos para saúde", "reference_author": "Agência Nacional de Vigilância Sanitária (ANVISA)", "reference_year": "2012", "reference_publisher": "Ministério da Saúde / ANVISA", "reference_source": "catalog", "reference_verified": true, "reference_key": "1v5cEFXfyIsZqYz7mVijoZm3seGx69pC3"
+    "reference_title": "Resolução RDC nº 15, de 15 de março de 2012: boas práticas para o processamento de produtos para saúde",
+    "reference_author": "Agência Nacional de Vigilância Sanitária (ANVISA)",
+    "reference_year": "2012",
+    "reference_publisher": "Ministério da Saúde / ANVISA",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1v5cEFXfyIsZqYz7mVijoZm3seGx69pC3"
   },
   "1XoSi4a7hJA7A9GdWxQxGucwCv3WLhv1f": {
-    "reference_title": "Construção e validação de vídeo educativo para pacientes no perioperatório de cirurgia robótica", "reference_author": "Elisângela Maria Ribeiro Guimarães; Islene Victor Barbosa; Thalita Gomes do Carmo; Débora Rodrigues Guerra Probo; Karla Maria Carneiro Rolim et al.", "reference_year": "2022", "reference_publisher": "Revista Brasileira de Enfermagem", "reference_source": "catalog", "reference_verified": true, "reference_key": "1XoSi4a7hJA7A9GdWxQxGucwCv3WLhv1f"
+    "reference_title": "Construção e validação de vídeo educativo para pacientes no perioperatório de cirurgia robótica",
+    "reference_author": "Elisângela Maria Ribeiro Guimarães; Islene Victor Barbosa; Thalita Gomes do Carmo; Débora Rodrigues Guerra Probo; Karla Maria Carneiro Rolim et al.",
+    "reference_year": "2022",
+    "reference_publisher": "Revista Brasileira de Enfermagem",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1XoSi4a7hJA7A9GdWxQxGucwCv3WLhv1f"
   },
-  "14dVMPLHlYsu5YP1GrC0_aFlMQWqy8Z8N": { "reference_title": "Cuidados de enfermagem aos pacientes cirúrgicos no período pré-operatório", "reference_author": "Neide da Silva Knihs; Juliana Balbinot Reis Girondi; Lúcia Nazaré Amante", "reference_publisher": "Universidade Federal de Santa Catarina (UFSC), INT 5204", "reference_source": "catalog", "reference_verified": true, "reference_key": "14dVMPLHlYsu5YP1GrC0_aFlMQWqy8Z8N" },
-  "1EPCBDJS70QMGgzsxG7WNHoP0GaN4feCD": { "reference_title": "A efetividade do tratamento da dor no pós-operatório de cirurgias ortopédicas", "reference_author": "Carina Galvan; Rosaura Soares Paczek; Bruna Noschang de Brum; Débora Machado Nascimento do Espírito Santo; Ana Karina Silva da Rocha Tanaka; Daniela Trintinaia Brito", "reference_publisher": "Revista Eletrônica Acervo Saúde", "reference_source": "catalog", "reference_verified": true, "reference_key": "1EPCBDJS70QMGgzsxG7WNHoP0GaN4feCD" },
-  "1nAb093keQj_Yhc0ggBrbFitGFblbrudE": { "reference_title": "Dor fantasma em pacientes submetidos à amputação: revisão integrativa", "reference_year": "2020", "reference_publisher": "Medicus, 2(2)", "reference_source": "catalog", "reference_verified": true, "reference_key": "1nAb093keQj_Yhc0ggBrbFitGFblbrudE" },
-  "1O0YOHXXn1t4mA03TX_G37T27QPd4icHc": { "reference_title": "Atualização no manejo da dor musculoesquelética", "reference_author": "André Wan Wen Tsai; Ricardo Kobayashi; Ibrahim Afrânio Willi Liu; Márcio Fim; André Cicone Liggieri; Edilson Silva Machado", "reference_year": "2024", "reference_publisher": "Revista Brasileira de Ortopedia, 59(2), e160–e171", "reference_source": "catalog", "reference_verified": true, "reference_key": "1O0YOHXXn1t4mA03TX_G37T27QPd4icHc" },
-  "1PqMF2K_ijUIrkhqDL-28KPJSA5dwinzY": { "reference_title": "Intervenções não farmacológicas no manejo da dor pós-operatória: concepção de enfermeiros", "reference_author": "Kerollayne Christtine Jacob; Lais Bezerra da Silva; Eder Dourado Martins da Costa; Iago Vieira Gomes; Solange Queiroga Serrano", "reference_year": "2021", "reference_publisher": "Revista de Enfermagem UFPE on line, 15(2), e247346", "reference_source": "catalog", "reference_verified": true, "reference_key": "1PqMF2K_ijUIrkhqDL-28KPJSA5dwinzY" },
-  "1SllmrhJX8SuZi5i6kFikDqBCtngSFhzh": { "reference_title": "Aspectos relevantes da visita pré-operatória de Enfermagem: benefícios para o paciente e para a assistência", "reference_author": "Ilana Maria Brasil do Espírito Santo; Francisco Lucas de Lima Fontes; Patrícia Maria do Espírito Santo; Anakelle Oliveira dos Santos; Elisangela Póvoas de Oliveira et al.", "reference_year": "2019", "reference_publisher": "Revista Eletrônica Acervo Saúde", "reference_source": "catalog", "reference_verified": true, "reference_key": "1SllmrhJX8SuZi5i6kFikDqBCtngSFhzh" },
-  "1Y0kgBCwjfPSAN9WAsXB2nCoM8oJM-mFJ": { "reference_title": "Centro cirúrgico, recuperação pós-anestésica e centro de material e esterilização para enfermagem", "reference_author": "Fernando Riegel; Nery José de Oliveira Junior (orgs.)", "reference_year": "2019", "reference_edition": "1. ed.", "reference_publisher": "Porto Alegre: Moriá", "reference_source": "catalog", "reference_verified": true, "reference_key": "1Y0kgBCwjfPSAN9WAsXB2nCoM8oJM-mFJ" },
-  "1yqwQggFm8jU0UjF-FqHRp9ga3TKYfxhc": { "reference_title": "Enfermagem em cardiologia: procedimentos em unidade semi-intensiva", "reference_author": "Rita de Cássia Ribeiro de Macedo; Alexandre Pazetto Balsanelli; Flavia Fernanda Franco; Edson Américo Sant’Ana (orgs.)", "reference_year": "2012", "reference_publisher": "Manole", "reference_source": "catalog", "reference_verified": true, "reference_key": "1yqwQggFm8jU0UjF-FqHRp9ga3TKYfxhc" },
-  "1GPn09XtMV0-zVQvV9jAeZUSBGS5oX_NT": { "reference_title": "Diretrizes de práticas em enfermagem cirúrgica e processamento de produtos para a saúde", "reference_author": "SOBECC — Associação Brasileira de Enfermeiros de Centro Cirúrgico, Recuperação Anestésica e Centro de Material e Esterilização", "reference_year": "2017", "reference_edition": "7. ed. rev. e atual.", "reference_publisher": "Barueri: Manole; São Paulo: SOBECC", "reference_source": "catalog", "reference_verified": true, "reference_key": "1GPn09XtMV0-zVQvV9jAeZUSBGS5oX_NT" },
-  "1uLOguHlm-IuiJ7nqv-j7m1u7bKPTm3cx": { "reference_title": "Cardiologia prática clínica", "reference_author": "Gláucia Maria Moraes de Oliveira; Olga Ferreira de Souza; Fernando Eugênio dos Santos Cruz Filho; Evandro Tinoco Mesquita; Cesar Gerson Pereira Subieta (eds.)", "reference_year": "2012", "reference_edition": "1. ed.", "reference_publisher": "SOCERJ — Sociedade de Cardiologia do Estado do Rio de Janeiro", "reference_source": "catalog", "reference_verified": true, "reference_key": "1uLOguHlm-IuiJ7nqv-j7m1u7bKPTm3cx" }
-  ,"1-y2_9a53d0ArQgLc4_PtZ22yBECV3rzN": { "reference_title": "Diretriz ACERTO de intervenções nutricionais no perioperatório em cirurgia geral eletiva", "reference_author": "José Eduardo de-Aguilar-Nascimento; Alberto Bicudo Salomão; Dan Linetzky Waitzberg; Diana Borges Dock-Nascimento; Maria Isabel T. D. Correa; Antonio Carlos L. Campos; Paulo Roberto Corsi; Pedro Eder Portari Filho; Cervantes Caporossi; Comissão de Cuidados Perioperatórios do Colégio Brasileiro de Cirurgiões; Sociedade Brasileira de Nutrição Parenteral e Enteral", "reference_year": "2017", "reference_publisher": "Revista do Colégio Brasileiro de Cirurgiões, 44(6), 633–648. DOI: 10.1590/0100-69912017006003", "reference_source": "catalog", "reference_verified": true, "reference_key": "1-y2_9a53d0ArQgLc4_PtZ22yBECV3rzN" },
-  "12iLd6ulHIxM8yw9h501KqZt5OYyXVbtT": { "reference_title": "Promoting Perioperative Metabolic and Nutritional Care", "reference_author": "Chelsia Gillis; Francesco Carli", "reference_year": "2015", "reference_publisher": "Anesthesiology, 123, 1455–1472", "reference_source": "catalog", "reference_verified": true, "reference_key": "12iLd6ulHIxM8yw9h501KqZt5OYyXVbtT" },
-  "1nAnS9Lgf5Ywwv43xtoq369StrZQaTTIU": { "reference_title": "Boas práticas para segurança do paciente em centro cirúrgico: recomendações de enfermeiros", "reference_author": "Luciana da Silva Gutierres; Juliana de Lima Gonçalves Santos; Caroline C. Peiter; Fabiane H. A. Menegon; Letícia F. Sebold; Alacoque Lorenzini Erdmann", "reference_year": "2018", "reference_publisher": "Revista Brasileira de Enfermagem, 71(Suppl 6), 2775–2782. DOI: 10.1590/0034-7167-2018-0449", "reference_source": "catalog", "reference_verified": true, "reference_key": "1nAnS9Lgf5Ywwv43xtoq369StrZQaTTIU" },
-  "1a42jr8rEqtm-Z_4JJcUAQ1iXayt-nQrT": { "reference_title": "Fatores que influenciam a adesão à lista de verificação de segurança cirúrgica", "reference_author": "Carina Cavalheiro da Silva; Andrea Diez Beck; Elisabete Cristina Martins da Silva; Thaís Pereira Pires Rodrigues", "reference_year": "2021", "reference_publisher": "Revista SOBECC, 26(4), 212–219. DOI: 10.5327/Z1414-4425202100040004", "reference_source": "catalog", "reference_verified": true, "reference_key": "1a42jr8rEqtm-Z_4JJcUAQ1iXayt-nQrT" },
-  "1tlLGjy3H7HybRDJfw7UqUxbmA2SrcVdQ": { "reference_title": "A segurança do paciente cirúrgico na perspectiva da vigilância sanitária: uma reflexão teórica", "reference_author": "Heiko Thereza Santana; Helen Norat Siqueira; Magda Machado Miranda Costa; Diana Carmem Almeida Nunes de Oliveira; Suzie Marie Gomes; Fabiana Cristina de Sousa; Ana Clara Ribeiro Bello dos Santos et al.", "reference_year": "2014", "reference_publisher": "Vigilância Sanitária em Debate, 2(2). DOI: 10.3395/vd.v2i2.124", "reference_source": "catalog", "reference_verified": true, "reference_key": "1tlLGjy3H7HybRDJfw7UqUxbmA2SrcVdQ" },
-  "1DlFt-yq4yEtwCfTbQ1tbesx4SBIaFFMt": { "reference_title": "Telessaúde: a experiência dos profissionais de saúde no setor suplementar", "reference_author": "Heloísa Pimenta Arruda Araújo; Lucas Cardoso dos Santos; Rúbia Aguiar Alencar", "reference_year": "2023", "reference_publisher": "Revista da Escola de Enfermagem da USP, 57, e20220374. DOI: 10.1590/1980-220X-REEUSP-2022-0374pt", "reference_source": "catalog", "reference_verified": true, "reference_key": "1DlFt-yq4yEtwCfTbQ1tbesx4SBIaFFMt" },
-  "12E3zeZALF2fXu7Axkq-bPbqqGi8PpkLa": { "reference_title": "Teleconsulta de enfermagem ao paciente submetido à cirurgia geral: inovação tecnológica", "reference_author": "Laura Dantas Jacome; Rosane Ferreira de Araujo Silva", "reference_year": "2022", "reference_publisher": "Global Academic Nursing Journal, 3(2), e250. DOI: 10.5935/2675-5602.20200250", "reference_source": "catalog", "reference_verified": true, "reference_key": "12E3zeZALF2fXu7Axkq-bPbqqGi8PpkLa" }
-  ,"1uC-_-TFRVx4pPW90wwfm0nS8CzkzdcMY":{"reference_title":"Clínica Cirúrgica 2 — SIC Resumão Revalida","reference_source":"catalog","reference_verified":true,"reference_confidence":"partial","reference_key":"1uC-_-TFRVx4pPW90wwfm0nS8CzkzdcMY"},"1a0YMt3q7p70f5iFaX_qQJ1RHouEvalYA":{"reference_title":"Passo 1 — Transporte seguro","reference_source":"catalog","reference_verified":true,"reference_confidence":"partial","reference_key":"1a0YMt3q7p70f5iFaX_qQJ1RHouEvalYA"},"1_VSuj-wh7VOliXi2M_7idLkb1jEAk5Yn":{"reference_title":"Alterações respiratórias","reference_source":"catalog","reference_verified":true,"reference_confidence":"partial","reference_key":"1_VSuj-wh7VOliXi2M_7idLkb1jEAk5Yn"},"1Tm4GYvbkUYo315CYRF4ssgWIoAdjIC-H":{"reference_title":"Analgésicos","reference_source":"catalog","reference_verified":true,"reference_confidence":"partial","reference_key":"1Tm4GYvbkUYo315CYRF4ssgWIoAdjIC-H"}
+  "14dVMPLHlYsu5YP1GrC0_aFlMQWqy8Z8N": {
+    "reference_title": "Cuidados de enfermagem aos pacientes cirúrgicos no período pré-operatório",
+    "reference_author": "Neide da Silva Knihs; Juliana Balbinot Reis Girondi; Lúcia Nazaré Amante",
+    "reference_publisher": "Universidade Federal de Santa Catarina (UFSC), INT 5204",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "14dVMPLHlYsu5YP1GrC0_aFlMQWqy8Z8N"
+  },
+  "1EPCBDJS70QMGgzsxG7WNHoP0GaN4feCD": {
+    "reference_title": "A efetividade do tratamento da dor no pós-operatório de cirurgias ortopédicas",
+    "reference_author": "Carina Galvan; Rosaura Soares Paczek; Bruna Noschang de Brum; Débora Machado Nascimento do Espírito Santo; Ana Karina Silva da Rocha Tanaka; Daniela Trintinaia Brito",
+    "reference_publisher": "Revista Eletrônica Acervo Saúde",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1EPCBDJS70QMGgzsxG7WNHoP0GaN4feCD"
+  },
+  "1nAb093keQj_Yhc0ggBrbFitGFblbrudE": {
+    "reference_title": "Dor fantasma em pacientes submetidos à amputação: revisão integrativa",
+    "reference_year": "2020",
+    "reference_publisher": "Medicus, 2(2)",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1nAb093keQj_Yhc0ggBrbFitGFblbrudE"
+  },
+  "1O0YOHXXn1t4mA03TX_G37T27QPd4icHc": {
+    "reference_title": "Atualização no manejo da dor musculoesquelética",
+    "reference_author": "André Wan Wen Tsai; Ricardo Kobayashi; Ibrahim Afrânio Willi Liu; Márcio Fim; André Cicone Liggieri; Edilson Silva Machado",
+    "reference_year": "2024",
+    "reference_publisher": "Revista Brasileira de Ortopedia, 59(2), e160–e171",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1O0YOHXXn1t4mA03TX_G37T27QPd4icHc"
+  },
+  "1PqMF2K_ijUIrkhqDL-28KPJSA5dwinzY": {
+    "reference_title": "Intervenções não farmacológicas no manejo da dor pós-operatória: concepção de enfermeiros",
+    "reference_author": "Kerollayne Christtine Jacob; Lais Bezerra da Silva; Eder Dourado Martins da Costa; Iago Vieira Gomes; Solange Queiroga Serrano",
+    "reference_year": "2021",
+    "reference_publisher": "Revista de Enfermagem UFPE on line, 15(2), e247346",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1PqMF2K_ijUIrkhqDL-28KPJSA5dwinzY"
+  },
+  "1SllmrhJX8SuZi5i6kFikDqBCtngSFhzh": {
+    "reference_title": "Aspectos relevantes da visita pré-operatória de Enfermagem: benefícios para o paciente e para a assistência",
+    "reference_author": "Ilana Maria Brasil do Espírito Santo; Francisco Lucas de Lima Fontes; Patrícia Maria do Espírito Santo; Anakelle Oliveira dos Santos; Elisangela Póvoas de Oliveira et al.",
+    "reference_year": "2019",
+    "reference_publisher": "Revista Eletrônica Acervo Saúde",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1SllmrhJX8SuZi5i6kFikDqBCtngSFhzh"
+  },
+  "1Y0kgBCwjfPSAN9WAsXB2nCoM8oJM-mFJ": {
+    "reference_title": "Centro cirúrgico, recuperação pós-anestésica e centro de material e esterilização para enfermagem",
+    "reference_author": "Fernando Riegel; Nery José de Oliveira Junior (orgs.)",
+    "reference_year": "2019",
+    "reference_edition": "1. ed.",
+    "reference_publisher": "Porto Alegre: Moriá",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1Y0kgBCwjfPSAN9WAsXB2nCoM8oJM-mFJ"
+  },
+  "1GPn09XtMV0-zVQvV9jAeZUSBGS5oX_NT": {
+    "reference_title": "Diretrizes de práticas em enfermagem cirúrgica e processamento de produtos para a saúde",
+    "reference_author": "SOBECC — Associação Brasileira de Enfermeiros de Centro Cirúrgico, Recuperação Anestésica e Centro de Material e Esterilização",
+    "reference_year": "2017",
+    "reference_edition": "7. ed. rev. e atual.",
+    "reference_publisher": "Barueri: Manole; São Paulo: SOBECC",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1GPn09XtMV0-zVQvV9jAeZUSBGS5oX_NT"
+  },
+  "1uLOguHlm-IuiJ7nqv-j7m1u7bKPTm3cx": {
+    "reference_title": "Cardiologia prática clínica",
+    "reference_author": "Gláucia Maria Moraes de Oliveira; Olga Ferreira de Souza; Fernando Eugênio dos Santos Cruz Filho; Evandro Tinoco Mesquita; Cesar Gerson Pereira Subieta (eds.)",
+    "reference_year": "2012",
+    "reference_edition": "1. ed.",
+    "reference_publisher": "SOCERJ — Sociedade de Cardiologia do Estado do Rio de Janeiro",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1uLOguHlm-IuiJ7nqv-j7m1u7bKPTm3cx"
+  },
+  "1-y2_9a53d0ArQgLc4_PtZ22yBECV3rzN": {
+    "reference_title": "Diretriz ACERTO de intervenções nutricionais no perioperatório em cirurgia geral eletiva",
+    "reference_author": "José Eduardo de-Aguilar-Nascimento; Alberto Bicudo Salomão; Dan Linetzky Waitzberg; Diana Borges Dock-Nascimento; Maria Isabel T. D. Correa; Antonio Carlos L. Campos; Paulo Roberto Corsi; Pedro Eder Portari Filho; Cervantes Caporossi; Comissão de Cuidados Perioperatórios do Colégio Brasileiro de Cirurgiões; Sociedade Brasileira de Nutrição Parenteral e Enteral",
+    "reference_year": "2017",
+    "reference_publisher": "Revista do Colégio Brasileiro de Cirurgiões, 44(6), 633–648. DOI: 10.1590/0100-69912017006003",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1-y2_9a53d0ArQgLc4_PtZ22yBECV3rzN"
+  },
+  "12iLd6ulHIxM8yw9h501KqZt5OYyXVbtT": {
+    "reference_title": "Promoting Perioperative Metabolic and Nutritional Care",
+    "reference_author": "Chelsia Gillis; Francesco Carli",
+    "reference_year": "2015",
+    "reference_publisher": "Anesthesiology, 123, 1455–1472",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "12iLd6ulHIxM8yw9h501KqZt5OYyXVbtT"
+  },
+  "1nAnS9Lgf5Ywwv43xtoq369StrZQaTTIU": {
+    "reference_title": "Boas práticas para segurança do paciente em centro cirúrgico: recomendações de enfermeiros",
+    "reference_author": "Luciana da Silva Gutierres; Juliana de Lima Gonçalves Santos; Caroline C. Peiter; Fabiane H. A. Menegon; Letícia F. Sebold; Alacoque Lorenzini Erdmann",
+    "reference_year": "2018",
+    "reference_publisher": "Revista Brasileira de Enfermagem, 71(Suppl 6), 2775–2782. DOI: 10.1590/0034-7167-2018-0449",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1nAnS9Lgf5Ywwv43xtoq369StrZQaTTIU"
+  },
+  "1a42jr8rEqtm-Z_4JJcUAQ1iXayt-nQrT": {
+    "reference_title": "Fatores que influenciam a adesão à lista de verificação de segurança cirúrgica",
+    "reference_author": "Carina Cavalheiro da Silva; Andrea Diez Beck; Elisabete Cristina Martins da Silva; Thaís Pereira Pires Rodrigues",
+    "reference_year": "2021",
+    "reference_publisher": "Revista SOBECC, 26(4), 212–219. DOI: 10.5327/Z1414-4425202100040004",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1a42jr8rEqtm-Z_4JJcUAQ1iXayt-nQrT"
+  },
+  "1tlLGjy3H7HybRDJfw7UqUxbmA2SrcVdQ": {
+    "reference_title": "A segurança do paciente cirúrgico na perspectiva da vigilância sanitária: uma reflexão teórica",
+    "reference_author": "Heiko Thereza Santana; Helen Norat Siqueira; Magda Machado Miranda Costa; Diana Carmem Almeida Nunes de Oliveira; Suzie Marie Gomes; Fabiana Cristina de Sousa; Ana Clara Ribeiro Bello dos Santos et al.",
+    "reference_year": "2014",
+    "reference_publisher": "Vigilância Sanitária em Debate, 2(2). DOI: 10.3395/vd.v2i2.124",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1tlLGjy3H7HybRDJfw7UqUxbmA2SrcVdQ"
+  },
+  "1DlFt-yq4yEtwCfTbQ1tbesx4SBIaFFMt": {
+    "reference_title": "Telessaúde: a experiência dos profissionais de saúde no setor suplementar",
+    "reference_author": "Heloísa Pimenta Arruda Araújo; Lucas Cardoso dos Santos; Rúbia Aguiar Alencar",
+    "reference_year": "2023",
+    "reference_publisher": "Revista da Escola de Enfermagem da USP, 57, e20220374. DOI: 10.1590/1980-220X-REEUSP-2022-0374pt",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1DlFt-yq4yEtwCfTbQ1tbesx4SBIaFFMt"
+  },
+  "12E3zeZALF2fXu7Axkq-bPbqqGi8PpkLa": {
+    "reference_title": "Teleconsulta de enfermagem ao paciente submetido à cirurgia geral: inovação tecnológica",
+    "reference_author": "Laura Dantas Jacome; Rosane Ferreira de Araujo Silva",
+    "reference_year": "2022",
+    "reference_publisher": "Global Academic Nursing Journal, 3(2), e250. DOI: 10.5935/2675-5602.20200250",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "12E3zeZALF2fXu7Axkq-bPbqqGi8PpkLa"
+  },
+  "1uC-_-TFRVx4pPW90wwfm0nS8CzkzdcMY": {
+    "reference_title": "Clínica Cirúrgica 2 — SIC Resumão Revalida",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_confidence": "partial",
+    "reference_key": "1uC-_-TFRVx4pPW90wwfm0nS8CzkzdcMY"
+  },
+  "1a0YMt3q7p70f5iFaX_qQJ1RHouEvalYA": {
+    "reference_title": "Passo 1 — Transporte seguro",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_confidence": "partial",
+    "reference_key": "1a0YMt3q7p70f5iFaX_qQJ1RHouEvalYA"
+  },
+  "1_VSuj-wh7VOliXi2M_7idLkb1jEAk5Yn": {
+    "reference_title": "Alterações respiratórias",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_confidence": "partial",
+    "reference_key": "1_VSuj-wh7VOliXi2M_7idLkb1jEAk5Yn"
+  },
+  "1Tm4GYvbkUYo315CYRF4ssgWIoAdjIC-H": {
+    "reference_title": "Analgésicos",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_confidence": "partial",
+    "reference_key": "1Tm4GYvbkUYo315CYRF4ssgWIoAdjIC-H"
+  },
+  "1oZ4itEwW2PIkFpcT_hTlrNPWaEj7Rox8": {
+    "reference_title": "Brunner & Suddarth: Tratado de enfermagem médico-cirúrgica",
+    "reference_author": "Lillian Sholtis Brunner; Doris Smith Suddarth; Suzanne C. Smeltzer (ed.)",
+    "reference_year": "2014",
+    "reference_edition": "12ª ed. [reimpr.]",
+    "reference_publisher": "Rio de Janeiro: Guanabara Koogan",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1oZ4itEwW2PIkFpcT_hTlrNPWaEj7Rox8"
+  },
+  "1k9XZvhMFiKPyO4PX3bpOHtRKoQJRGXjN": {
+    "reference_title": "Enfermagem em cardiologia: procedimentos em unidade semi-intensiva",
+    "reference_author": "Rita de Cássia Ribeiro de Macedo; Alexandre Pazetto Balsanelli; Flavia Fernanda Franco; Edson Américo Sant’Ana (orgs.)",
+    "reference_year": "2012",
+    "reference_publisher": "Manole",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1k9XZvhMFiKPyO4PX3bpOHtRKoQJRGXjN"
+  },
+  "1U6zJc7U4cZpIiqF8aN_RsRLYe4BDyY59": {
+    "reference_title": "Cuidados críticos de enfermagem: uma abordagem holística",
+    "reference_author": "Patricia Gonce Morton; Dorrie K. Fontaine",
+    "reference_year": "2013",
+    "reference_edition": "[Reimpr.]",
+    "reference_publisher": "Rio de Janeiro: Guanabara Koogan",
+    "reference_source": "catalog",
+    "reference_verified": true,
+    "reference_key": "1U6zJc7U4cZpIiqF8aN_RsRLYe4BDyY59"
+  }
 }

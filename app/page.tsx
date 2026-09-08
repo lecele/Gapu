@@ -108,13 +108,18 @@ export default function HomePage() {
         <BranchDecoration />
 
         <header className="guapu-header">
-          <div className="guapu-brand">
-            <GuapuMark size={38} />
+          <button
+            type="button"
+            className="guapu-brand"
+            onClick={startNewSession}
+            aria-label="Voltar para o inicio do Guapu"
+          >
+            <GuapuMark size={46} />
             <div className="guapu-brand-copy">
               <span className="guapu-wordmark">Guapu</span>
-              <span className="guapu-context-pill">Tutor de Enfermagem</span>
+              <span className="guapu-context-pill">Tutor para Enfermagem Perioperatória</span>
             </div>
-          </div>
+          </button>
           <div className="guapu-header-actions">
             <button
               type="button"
@@ -191,8 +196,7 @@ function WelcomeMenu({ onSelect }: { onSelect: (message: string, activeMode: Cha
   return (
     <div className="guapu-welcome">
       <section className="guapu-hero">
-        <div className="guapu-header-eyebrow"><span /> Assistente de IA · INT 5224</div>
-        <h1>O cuidado no processo de viver humano II: a condição cirúrgica</h1>
+        <div className="guapu-header-eyebrow"><span className="guapu-header-eyebrow-text">O cuidado no processo de viver humano II: a condição cirúrgica · INT 5224</span></div>
         <p className="guapu-lead">
           Olá, eu sou o Guapu, o tutor inteligente da disciplina INT 5224, do curso de Graduação em Enfermagem da UFSC. Estarei aqui para facilitar sua jornada de aprendizagem sobre o cuidado de enfermagem ao paciente cirúrgico.
         </p>

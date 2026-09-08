@@ -421,13 +421,51 @@ export function resolveTurn(state: SessionState, message: string, activeMode?: C
   };
 }
 
-export function finalizeGeneratedTurn(decision: FlowDecision, assistantText: string): SessionState {
+export type QuizVerdict = 'correta' | 'incorreta';
+
+/**
+ * O servidor precisa saber se a resposta do estudante estava certa para decidir
+ * entre repetir a questão, avançar ou encerrar. Até aqui essa decisão saía de um
+ * regex na prosa do modelo (/resposta está incorreta ... tente novamente/), o
+ * que é frágil por construção: bastava o modelo variar uma palavra para o
+ * servidor perder o estado. Era a origem da família de bugs do quiz — a tela
+ * mostrava uma questão e o servidor contava outra.
+ *
+ * Agora o modelo declara o veredito numa primeira linha marcada, que o servidor
+ * lê e remove antes de o estudante ver o texto. O regex antigo continua como
+ * último recurso, para o turno em que o modelo esquecer a marca.
+ */
+const VERDICT_TAG = /^\s*\[VEREDITO:\s*(CORRETA|INCORRETA)\s*\]\s*/i;
+
+export function extractQuizVerdict(assistantText: string): { verdict: QuizVerdict | null; text: string } {
+  const match = assistantText.match(VERDICT_TAG);
+  const semMarca = (t: string) => t.replace(/\[VEREDITO:[^\]]*\]/gi, '').trimStart();
+  if (!match) return { verdict: null, text: semMarca(assistantText) };
+  return {
+    verdict: match[1].toUpperCase() === 'CORRETA' ? 'correta' : 'incorreta',
+    text: semMarca(assistantText.slice(match[0].length)),
+  };
+}
+
+export function quizAnsweredWrong(
+  assistantText: string,
+  verdict: QuizVerdict | null = null,
+): boolean {
+  if (verdict !== null) return verdict === 'incorreta';
+  return /resposta est[aá] incorreta[\s\S]{0,80}tente novamente/i.test(assistantText);
+}
+
+export function finalizeGeneratedTurn(
+  decision: FlowDecision,
+  assistantText: string,
+  verdict: QuizVerdict | null = null,
+): SessionState {
   if (decision.generationMode !== 'simulado_respondendo' && decision.generationMode !== 'simulado_segunda_tentativa') {
     return decision.stateAfter;
   }
 
   const currentQuestion = Math.max(1, decision.quizQuestion);
-  const requestsRetry = /resposta est[aá] incorreta[\s\S]{0,80}tente novamente/i.test(assistantText);
+  const requestsRetry = quizAnsweredWrong(assistantText, verdict);
 
   if (decision.generationMode === 'simulado_respondendo' && requestsRetry) {
     return nextState(decision.stateBefore, {

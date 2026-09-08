@@ -147,3 +147,10 @@ grep -c 'MAX_REFERENCES' "$APP_DIR/lib/chat/references.ts"
 say "DEPLOY CONCLUÍDO"
 echo "Backup do estado anterior: $BACKUP_DIR"
 echo "Imagem de rollback: $ROLLBACK_TAG"
+
+# O script chega aqui via "bash -s" lendo o conteudo de um arquivo enviado
+# por um pipe do PowerShell no Windows, que costuma acrescentar um \r extra
+# ao final do fluxo. Sem esse "exit 0" explicito, o bash tenta executar essa
+# sobra como comando ("$'\r': command not found") e o codigo de saida do
+# deploy inteiro fica 127 mesmo quando tudo deu certo.
+exit 0

@@ -431,10 +431,27 @@ function stripInheritedCitationMarkers(text: string): string {
 }
 
 /**
- * Separa a pergunta de encerramento do corpo da resposta para que a seção
- * `**Referências**` fique antes dela, conforme os Exemplos A e H do Prompt 03.
+ * Na v1.7.0 as modalidades estruturadas passaram a encerrar no menu curto, e
+ * não mais numa pergunta ("deseja aprofundar...?"). O bloco do menu precisa ser
+ * reconhecido aqui pelo mesmo motivo que a pergunta era: a seção
+ * `**Referências**` entra ANTES do encerramento. Sem isso, o menu — que é a
+ * próxima ação do estudante — fica soterrado abaixo da lista de referências.
+ */
+const CLOSING_MENU = /(?:^|\n)[ \t]*(Menu principal:(?:\n[ \t]*[-•][^\n]*)+)[ \t]*$/;
+
+/**
+ * Separa o encerramento (menu curto ou, no legado, a pergunta) do corpo da
+ * resposta para que a seção `**Referências**` fique antes dele, conforme os
+ * Exemplos A e H do Prompt 03.
  */
 function splitClosingQuestion(text: string): { body: string; closing: string } {
+  const menu = text.match(CLOSING_MENU);
+  if (menu && menu.index !== undefined) {
+    return {
+      body: text.slice(0, menu.index).trimEnd(),
+      closing: menu[1].trim(),
+    };
+  }
   const match = text.match(CLOSING_QUESTION);
   if (!match || match.index === undefined) return { body: text, closing: '' };
   return {

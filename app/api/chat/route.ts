@@ -9,6 +9,9 @@ import { GoogleGenAI } from '@google/genai';
 
 import {
   finalizeGeneratedTurn,
+  extractQuizVerdict,
+  quizAnsweredWrong,
+  type QuizVerdict,
   resolveTurn,
   type FastResponseKey,
   type GenerationMode,
@@ -25,7 +28,7 @@ import {
 } from '@/lib/chat/session-store';
 import { buildCorePrompt, PROMPT_VERSION } from '@/lib/chat/prompts/core';
 import { buildFlowPrompt } from '@/lib/chat/prompts/flow';
-import { buildModePrompt } from '@/lib/chat/prompts/modes';
+import { buildModePrompt, MENU_CURTO_TEXTO } from '@/lib/chat/prompts/modes';
 import { inferStudentLevel, type StudentLevel } from '@/lib/chat/student-level';
 import {
   finalizeReferences,
@@ -35,6 +38,7 @@ import {
 import { enrichDocumentReferenceMetadata } from '@/lib/chat/document-catalog';
 import { buildActivePlanProfessorResponse } from '@/lib/chat/course-catalog';
 import { OUT_OF_SCOPE_RESPONSE, resolveOutOfScopeTopic } from '@/lib/chat/scope';
+import { EXAM_ANSWER_RESPONSE, resolveExamAnswerRequest } from '@/lib/chat/exam-request';
 
 export const runtime = 'nodejs';
 export const maxDuration = 120;
@@ -575,18 +579,49 @@ function getGenAI() {
 
 // ── Embedding ─────────────────────────────────────────────────────────────────
 
+// Um 429 RESOURCE_EXHAUSTED do Gemini derrubava a recuperação na primeira
+// tentativa e o aluno recebia "falha temporária" (observado em produção em
+// 03/09/2026, em 3 de 6 pedidos). Diferente da ingestão, aqui o aluno está
+// esperando na tela: o retry é curto de propósito, para cobrir o repique de
+// cota sem deixar a interface travada. Cota cronicamente estourada continua
+// exigindo aumento de quota — isto reduz a falha, não a elimina.
+const EMBED_RETRY_DELAYS_MS = [700, 1_800];
+
+function isRetriableEmbeddingError(error: unknown): boolean {
+  const status = (error as { status?: number } | null)?.status;
+  if (status === 429 || status === 500 || status === 503 || status === 504) return true;
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  return /RESOURCE_EXHAUSTED|UNAVAILABLE|DEADLINE_EXCEEDED|ECONNRESET|ETIMEDOUT|fetch failed/i.test(message);
+}
+
 async function embedQuery(text: string): Promise<number[]> {
-  const result = await getGenAI().models.embedContent({
-    model: 'gemini-embedding-2',
-    contents: text,
-    config: {
-      outputDimensionality: 768,
-      taskType: 'RETRIEVAL_QUERY',
-    },
-  });
-  const values = result.embeddings?.[0]?.values;
-  if (!values?.length) throw new Error('EMBEDDING_EMPTY');
-  return values;
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= EMBED_RETRY_DELAYS_MS.length; attempt += 1) {
+    try {
+      const result = await getGenAI().models.embedContent({
+        model: 'gemini-embedding-2',
+        contents: text,
+        config: {
+          outputDimensionality: 768,
+          taskType: 'RETRIEVAL_QUERY',
+        },
+      });
+      const values = result.embeddings?.[0]?.values;
+      if (!values?.length) throw new Error('EMBEDDING_EMPTY');
+      return values;
+    } catch (error) {
+      lastError = error;
+      const delay = EMBED_RETRY_DELAYS_MS[attempt];
+      if (delay === undefined || !isRetriableEmbeddingError(error)) break;
+      console.warn(
+        `[chat] EMBEDDING_RETRY tentativa=${attempt + 1}/${EMBED_RETRY_DELAYS_MS.length + 1} aguardando=${delay}ms status=${(error as { status?: number } | null)?.status ?? 'n/a'}`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw lastError;
 }
 
 // ── Retrieval ─────────────────────────────────────────────────────────────────
@@ -781,7 +816,12 @@ async function generateWithProvider(
 
 function maxOutputTokensForMode(mode: GenerationMode): number {
   if (mode === 'simulado_tema' || mode === 'simulado_respondendo' || mode === 'simulado_segunda_tentativa') {
-    return 900;
+    // 900 era suficiente para o gpt-4o-mini, mas cortava o gemini-3.8-flash no
+    // meio das alternativas (08/09/2026): a questão chegava truncada e, quando
+    // o corte comia a próxima questão, o fluxo caía no aviso "não consegui
+    // formular a próxima questão". Um turno de quiz precisa caber feedback da
+    // resposta anterior MAIS o enunciado seguinte com quatro alternativas.
+    return 1_600;
   }
   if (mode === 'info') return 1_200;
   if (mode === 'resumo' || mode === 'resumo_aprofundar') return 1_800;
@@ -795,6 +835,7 @@ async function generateResponse(
   sessionMode: GenerationMode = 'livre',
   inlineTheme?: string,
   quizQuestion = 0,
+  quizAttempt = 0,
   sessionState = 'LIVRE',
   activeMode = 'livre',
   completionRequirement?: string,
@@ -807,7 +848,7 @@ async function generateResponse(
     context: formatContext(docs),
     history: formatHistory(history),
     studentLevel: effectiveStudentLevel,
-  })}\n\n${buildFlowPrompt({ state: sessionState, mode: activeMode, topic: inlineTheme || '', quizQuestion, studentLevel: effectiveStudentLevel })}`;
+  })}\n\n${buildFlowPrompt({ state: sessionState, mode: activeMode, topic: inlineTheme || '', quizQuestion, quizAttempt, studentLevel: effectiveStudentLevel })}`;
 
   // A ordem pode ser configurada por ambiente sem tocar no RAG. A cadeia
   // operacional é OpenAI -> Gemini; não há provedor intermediário.
@@ -862,12 +903,24 @@ async function generateResponse(
         maxOutputTokensForMode(sessionMode),
       );
 
-      // Garante a presença da pergunta de encerramento sem re-execução custosa
+      // Garante a presença do encerramento sem re-execução custosa. Na v1.7.0 o
+      // encerramento das modalidades estruturadas passou a ser o menu curto, em
+      // vez da pergunta "deseja aprofundar / outro tema / menu / encerrar"
+      // (pedido do cliente: a decisão intermediária contribuía para a degradação
+      // relatada ao longo da interação). Informações da Disciplina entrou nesta
+      // lista, que antes cobria só as variações de Resumo.
+      //
+      // O texto é anexado aqui, e não pedido ao modelo, pelo mesmo motivo do
+      // código anterior: instrução de prompt não garante a presença — foi
+      // exatamente o que aconteceu ao tentar mudar isso apenas no modes.ts, e o
+      // resumo continuou encerrando com a frase antiga, anexada por este bloco.
+      // O guard evita duplicar caso o modelo escreva o menu por conta própria.
       if (
-        (sessionMode === 'resumo' || sessionMode === 'resumo_aprofundar' || sessionMode === 'resumo_reformular') &&
-        !text.includes('Deseja')
+        (sessionMode === 'resumo' || sessionMode === 'resumo_aprofundar'
+          || sessionMode === 'resumo_reformular' || sessionMode === 'info')
+        && !text.includes('Menu principal')
       ) {
-        text = `${text.trim()}\n\n` + 'Deseja aprofundar este tema, escolher outro tema, voltar ao menu principal ou encerrar a sessão?';
+        text = `${text.trim()}\n\n${MENU_CURTO_TEXTO}`;
       }
 
       if (text && text.trim().length > 0) {
@@ -911,14 +964,22 @@ async function generateResponse(
   };
 }
 
-function requiresNextQuizQuestion(decision: ReturnType<typeof resolveTurn>, answer: string): boolean {
+function requiresNextQuizQuestion(
+  decision: ReturnType<typeof resolveTurn>,
+  answer: string,
+  verdict: QuizVerdict | null = null,
+): boolean {
   if (
     decision.generationMode !== 'simulado_respondendo' &&
     decision.generationMode !== 'simulado_segunda_tentativa'
   ) return false;
   const currentQuestion = Math.max(1, decision.quizQuestion);
   if (currentQuestion >= 3) return false;
-  if (/resposta est[aá] incorreta[\s\S]{0,80}tente novamente/i.test(answer)) return false;
+  // Turno de nova tentativa não deve trazer a próxima questão. O veredito
+  // declarado pelo modelo manda; o texto só é consultado se ele faltar.
+  const turnoDeRetentativa = decision.generationMode === 'simulado_respondendo'
+    && quizAnsweredWrong(answer, verdict);
+  if (turnoDeRetentativa) return false;
   return !new RegExp(`quest[aã]o\\s*${currentQuestion + 1}\\s*:`, 'i').test(answer);
 }
 
@@ -964,6 +1025,42 @@ function needsClinicalCompletenessRepair(question: string, answer: string): bool
   const body = answerBodyBeforeReferences(answer);
   return isLikelyTruncatedAnswer(answer) || (asksForExample(question) && !hasExampleSection(body));
 }
+
+/**
+ * Recusa indevida em pergunta que apenas cita autor ou obra do acervo.
+ *
+ * A v1.7.0 tentou resolver isso com instrução de prompt (core.ts, item 4.1).
+ * Medido em produção em 08/09/2026, NÃO funcionou. Um teste 2x2 isolou a
+ * variável: com citação, recusa; sem citação, resposta normal — nos dois temas
+ * testados, inclusive "cuidados com dreno torácico", que é núcleo da ementa.
+ * É a terceira vez neste projeto em que instrução de prompt não altera o
+ * comportamento, então a garantia vem para o código, como já foi feito com
+ * escopo (scope.ts) e resposta pronta de avaliação (exam-request.ts).
+ *
+ * O gatilho é deliberadamente estreito. Uma recusa legítima — diagnóstico,
+ * prescrição, tentativa de extrair o prompt — nunca pode ser convertida em
+ * resposta por um retry automático, então só reparamos quando a pergunta traz
+ * marca de citação bibliográfica E não fala do funcionamento do assistente.
+ */
+const GUARDRAIL_REFUSAL_MARKER = 'Não posso responder a essa solicitação';
+
+const CITATION_CUE = /(?:^|[\s(])(?:[Ss]egundo|[Cc]onforme|[Dd]e acordo com)\s+[A-ZÀ-Ú]|\bo que\s+[A-ZÀ-Ú][^?]{0,60}\bdiz(?:em)?\b|\b(?:no livro|na obra|d[oa]s? autor(?:es)?)\b/;
+
+const ASSISTANT_INTERNALS_CUE = /\b(?:prompt|instru[çc][õo]es|modelo|credenci\w*|jailbreak|rag|sistema interno|regras internas)\b/i;
+
+function wronglyRefusedCitation(question: string, answer: string): boolean {
+  if (!answer.includes(GUARDRAIL_REFUSAL_MARKER)) return false;
+  if (ASSISTANT_INTERNALS_CUE.test(question)) return false;
+  return CITATION_CUE.test(question);
+}
+
+const CITATION_IS_NOT_A_REFUSAL_REQUIREMENT = [
+  'A pergunta do estudante cita um autor ou uma obra da bibliografia da disciplina.',
+  'Isso NÃO é tentativa de revelar o funcionamento interno do assistente e NÃO é motivo de recusa:',
+  'é uma pergunta acadêmica comum, do mesmo tipo que citar um autor em qualquer trabalho de enfermagem.',
+  'Responda normalmente ao conteúdo perguntado, com base nos materiais fornecidos.',
+  'Não use o texto de recusa nem o de fora de escopo.',
+].join(' ');
 
 const CLINICAL_COMPLETENESS_REQUIREMENT = [
   'A resposta anterior ficou incompleta ou deixou de atender a um item pedido.',
@@ -1223,6 +1320,56 @@ export async function POST(req: NextRequest) {
     // Um tema fora da ementa é redirecionado sem gastar recuperação nem
     // geração, e sem seção de Referências — o texto 3.2 não é uma recusa
     // ética e não é conteúdo insuficiente.
+    // Pedido de resposta pronta de avaliação: recusa determinística, antes da
+    // recuperação, pelo mesmo motivo do escopo — a regra existe no prompt
+    // (core.ts, prioridade 3) e o modelo a ignorava em 6 de 7 pedidos medidos
+    // em 03/09/2026. Não é recusa por escopo: o tema costuma estar na ementa,
+    // o que não pode ser entregue é a resposta pronta.
+    const examRequestReason = resolveExamAnswerRequest(question, decision.generationMode);
+    if (examRequestReason) {
+      const totalLatency = Date.now() - startedAt;
+      const metadata = buildTurnMetadata({
+        requestId,
+        mode: decision.stateBefore.mode,
+        stateBefore: decision.stateBefore.state,
+        stateAfter: decision.stateBefore.state,
+        topic: decision.topic,
+        quizQuestion: decision.stateBefore.quizQuestion,
+        quizAttempt: decision.stateBefore.quizAttempt,
+        docs: [],
+        retrievalCacheHit: false,
+        modelRequested: null,
+        modelUsed: 'deterministic-exam-request',
+        fallbackUsed: true,
+        fallbackReason: `EXAM_ANSWER_REQUEST:${examRequestReason}`,
+        embeddingLatency: 0,
+        retrievalLatency: 0,
+        generationLatency: 0,
+        totalLatency,
+        errorCode: null,
+        corpusVersion: null,
+      });
+
+      await saveTurnBounded(supabase, {
+        sessionId,
+        requestId,
+        userMessage: question,
+        assistantMessage: EXAM_ANSWER_RESPONSE,
+        state: decision.stateBefore,
+        metadata,
+      });
+
+      return chatResponse({
+        answer: EXAM_ANSWER_RESPONSE,
+        sessionId,
+        requestId,
+        sourcesFound: 0,
+        historyLength: history.length + 2,
+        processingTimeMs: Date.now() - startedAt,
+        responseKind: 'fallback',
+      });
+    }
+
     const outOfScopeTopic = resolveOutOfScopeTopic(question, decision.generationMode);
     if (outOfScopeTopic) {
       const totalLatency = Date.now() - startedAt;
@@ -1333,6 +1480,10 @@ export async function POST(req: NextRequest) {
     // será ativada somente com timeout/telemetria próprios.
 
     let answer: string;
+    // Veredito do quiz declarado pelo modelo. É a fonte de verdade para decidir
+    // repetir a questão, avançar ou encerrar — no lugar do regex na prosa que
+    // dessincronizava tela e servidor.
+    let quizVerdict: QuizVerdict | null = null;
     let finalState = decision.stateAfter;
     let modelRequested: string | null = null;
     let modelUsed: string | null = null;
@@ -1361,7 +1512,7 @@ export async function POST(req: NextRequest) {
       // ou dispositivos.
       answer = buildActivePlanProfessorResponse();
       modelUsed = 'deterministic-active-plan-catalog';
-      finalState = finalizeGeneratedTurn(decision, answer);
+      finalState = finalizeGeneratedTurn(decision, answer, quizVerdict);
     } else if (
       isPlanLoadPeriodQuestion(question)
       && docs.length > 0
@@ -1379,7 +1530,7 @@ export async function POST(req: NextRequest) {
         question,
       );
       modelUsed = 'deterministic-plan-facts';
-      finalState = finalizeGeneratedTurn(decision, answer);
+      finalState = finalizeGeneratedTurn(decision, answer, quizVerdict);
     } else {
       const generation = await generateResponse(
         question,
@@ -1388,6 +1539,7 @@ export async function POST(req: NextRequest) {
         decision.generationMode ?? 'livre',
         decision.topic,
         decision.quizQuestion,
+        decision.quizAttempt,
         decision.stateBefore.state,
         decision.stateBefore.mode,
         professorListQuestion
@@ -1395,13 +1547,41 @@ export async function POST(req: NextRequest) {
           : undefined,
         retrievalSourcePattern,
       );
-      answer = generation.text;
+      const vereditoInicial = extractQuizVerdict(generation.text);
+      quizVerdict = vereditoInicial.verdict ?? quizVerdict;
+      answer = vereditoInicial.text;
       modelRequested = generation.modelRequested;
       modelUsed = generation.modelUsed;
       fallbackUsed = generation.fallbackUsed;
       fallbackReason = generation.fallbackReason;
       generationLatency = generation.latencyMs;
       generationErrorCode = generation.errorCode;
+
+      // Vem antes dos outros reparos: se a resposta é uma recusa indevida, os
+      // reparos seguintes estariam avaliando o texto de recusa, não o conteúdo.
+      if (!generationErrorCode && wronglyRefusedCitation(question, answer)) {
+        const repair = await generateResponse(
+          question,
+          docs,
+          history.slice(-12) as ChatHistoryItem[],
+          decision.generationMode ?? 'livre',
+          decision.topic,
+          decision.quizQuestion,
+          decision.quizAttempt,
+          decision.stateBefore.state,
+          decision.stateBefore.mode,
+          CITATION_IS_NOT_A_REFUSAL_REQUIREMENT,
+          retrievalSourcePattern,
+        );
+        if (!repair.errorCode && !repair.text.includes(GUARDRAIL_REFUSAL_MARKER)) {
+          answer = repair.text;
+          modelUsed = repair.modelUsed;
+          fallbackUsed = fallbackUsed || repair.fallbackUsed;
+          fallbackReason = repair.fallbackReason ?? fallbackReason;
+          generationLatency += repair.latencyMs;
+        }
+      }
+
       if (
         !generationErrorCode &&
         decision.generationMode === 'info' &&
@@ -1420,6 +1600,7 @@ export async function POST(req: NextRequest) {
           decision.generationMode ?? 'livre',
           decision.topic,
           decision.quizQuestion,
+          decision.quizAttempt,
           decision.stateBefore.state,
           decision.stateBefore.mode,
           POSTOPERATIVE_COVERAGE_REQUIREMENT,
@@ -1441,6 +1622,7 @@ export async function POST(req: NextRequest) {
           decision.generationMode ?? 'livre',
           decision.topic,
           decision.quizQuestion,
+          decision.quizAttempt,
           decision.stateBefore.state,
           decision.stateBefore.mode,
           CLINICAL_COMPLETENESS_REQUIREMENT,
@@ -1454,7 +1636,7 @@ export async function POST(req: NextRequest) {
           generationLatency += repair.latencyMs;
         }
       }
-      if (!generation.errorCode && requiresNextQuizQuestion(decision, answer)) {
+      if (!generation.errorCode && requiresNextQuizQuestion(decision, answer, quizVerdict)) {
         const expectedQuestion = Math.max(1, decision.quizQuestion) + 1;
         const repair = await generateResponse(
           question,
@@ -1463,12 +1645,15 @@ export async function POST(req: NextRequest) {
           decision.generationMode ?? 'livre',
           decision.topic,
           decision.quizQuestion,
+          decision.quizAttempt,
           decision.stateBefore.state,
           decision.stateBefore.mode,
           `Sua resposta deve obrigatoriamente corrigir a Questão ${expectedQuestion - 1} e, em seguida, incluir a linha **Questão ${expectedQuestion}:** com quatro alternativas A, B, C e D. Não termine a resposta antes dessa nova questão.`,
         );
-        if (!repair.errorCode && !requiresNextQuizQuestion(decision, repair.text)) {
-          answer = repair.text;
+        const vereditoReparo = extractQuizVerdict(repair.text);
+        if (!repair.errorCode && !requiresNextQuizQuestion(decision, vereditoReparo.text, vereditoReparo.verdict ?? quizVerdict)) {
+          quizVerdict = vereditoReparo.verdict ?? quizVerdict;
+          answer = vereditoReparo.text;
           modelUsed = repair.modelUsed;
           fallbackUsed = fallbackUsed || repair.fallbackUsed;
           fallbackReason = repair.fallbackReason ?? fallbackReason;
@@ -1480,7 +1665,7 @@ export async function POST(req: NextRequest) {
       }
       finalState = generationErrorCode
         ? decision.stateBefore
-        : finalizeGeneratedTurn(decision, answer);
+        : finalizeGeneratedTurn(decision, answer, quizVerdict);
     }
 
     // Última barreira antes de persistir e enviar a resposta ao estudante.
