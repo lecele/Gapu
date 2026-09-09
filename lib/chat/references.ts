@@ -60,8 +60,39 @@ export function isLikelyInfoInsufficient(question: string, answer: string): bool
   // `\w`, fazendo a detecção falhar justamente no texto mais comum do modelo.
   const absence = /(?:^|\s)(?:n[aã]o\s+const(?:a|am)|n[aã]o\s+h[aá]|n[aã]o\s+existe(?:m)?|n[aã]o\s+foi\s+encontrad[ao]s?|n[aã]o\s+localiz(?:ei|amos)|n[aã]o\s+encontr(?:ei|amos)|n[aã]o\s+est[aá]\s+dispon[ií]vel|n[aã]o\s+foi\s+poss[ií]vel\s+(?:confirmar|localizar|identificar)|sem\s+registro)(?=\s|[.,;:!?)]|$)/i.test(answer);
   const guidance = /\b(?:Moodle|plano de ensino|consult(?:e|ar)|confirmar|comunicado|docente)/i.test(answer);
-  return absence && guidance;
+  if (!absence || !guidance) return false;
+
+  // Uma ressalva DENTRO de uma resposta util nao é uma resposta insuficiente.
+  //
+  // Medido em producao em 09/09/2026: perguntando "como e a avaliacao da
+  // disciplina?" cinco vezes, com as 5 fontes recuperadas em todas, tres
+  // tentativas devolveram ao estudante uma unica linha de 62 caracteres
+  // ("Consultar o plano de ensino na pagina da disciplina no Moodle") e duas
+  // devolveram 2.000+ caracteres uteis. A diferenca nao estava na busca nem no
+  // modelo: estava aqui. O Prompt 03 manda o modelo avisar quando a tabela de
+  // pesos vier truncada ("explique objetivamente a limitacao e oriente a
+  // consulta ao plano completo no Moodle") -- e era exatamente essa frase,
+  // correta e pedida, que fazia o detector classificar a resposta inteira como
+  // insuficiente e descartar tudo. O detector existe para o caso em que a
+  // resposta e SO a declaracao de ausencia, nao para qualquer resposta que a
+  // contenha.
+  //
+  // O corpo e medido sem Referencias e sem o menu de encerramento, que a
+  // aplicacao anexa depois e nao contam como conteudo.
+  const body = answer
+    .replace(/\*\*Refer[êe]ncias\*\*[\s\S]*$/i, '')
+    .replace(/Menu principal:[\s\S]*$/i, '')
+    .trim();
+  return body.length <= SUBSTANTIVE_INFO_ANSWER_CHARS;
 }
+
+/**
+ * Acima disso a resposta de Informacoes tem conteudo proprio e nao pode ser
+ * substituida pela orientacao curta. As respostas uteis medidas ficaram entre
+ * 1.300 e 2.400 caracteres; as que eram so declaracao de ausencia, abaixo de
+ * 400. O limite fica no meio, longe dos dois grupos.
+ */
+const SUBSTANTIVE_INFO_ANSWER_CHARS = 700;
 
 // O cliente pede dedupe por documento e uma lista enxuta. Com 5 trechos
 // recuperados, publicar 5 obras transformava a seção em uma bibliografia do

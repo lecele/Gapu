@@ -89,15 +89,53 @@ function UserBubble({ content }: { content: string }) {
 // Qualquer outro item de lista (conteúdo, referências, exemplos) renderiza como <li> normal
 const MENU_BUTTON_RE = /^(resumo de conteúdo|resumo|quiz da disciplina|quiz|simulado de prova|simulado|informações da disciplina|informações|encerrar sessão|encerrar|aprofundar|aprofundar este tema|aprofundar mais|escolher outro tema|outro tema|voltar ao menu principal|voltar ao menu|menu principal|continuar o simulado|continuar simulado|continuar o quiz|continuar quiz|fazer outra pergunta|outra pergunta|repetir a pergunta)$/i;
 
+/**
+ * Bloco de menu curto no final da resposta (v1.7.0) -> botoes (v1.8.0).
+ *
+ * Pedido do cliente em 09/09/2026: ao final do Resumo e de Informacoes da
+ * Disciplina o menu aparecia como lista de marcadores comum dentro do balao,
+ * enquanto no Quiz vinha com os botoes clicaveis. A hipotese no pedido era que
+ * o Quiz recebia o menu como uma segunda mensagem, e que a aplicacao precisaria
+ * passar a emitir duas mensagens. Nao e o caso: o menu do Quiz sempre esteve na
+ * mesma mensagem, e virava botao porque o renderizador de <li> abaixo converte
+ * itens de menu conhecidos em botoes. O que bloqueava o Resumo era a guarda
+ * `responseKind === 'summary'` desse renderizador, criada quando o fim de um
+ * resumo ainda era uma pergunta em prosa e qualquer lista ali era conteudo --
+ * transformar bullets de conteudo em botoes seria pior.
+ *
+ * Em vez de afrouxar aquela guarda (que continua correta para o conteudo), o
+ * menu passa a ser extraido do texto e renderizado como um grupo proprio de
+ * botoes, fora do markdown. Assim vale para todas as modalidades, o conteudo
+ * nunca vira botao por coincidencia, e nao e preciso uma segunda chamada ao
+ * modelo nem uma segunda mensagem.
+ */
+const CLOSING_MENU_BLOCK = /\n*[ \t]*Menu principal:[ \t]*\n((?:[ \t]*(?:[-*\u2022])[^\n]*\n?)+)[\s]*$/;
+
+function extractClosingMenu(text: string): { body: string; options: string[] } {
+  const match = text.match(CLOSING_MENU_BLOCK);
+  if (!match) return { body: text, options: [] };
+  const options = match[1]
+    .split('\n')
+    .map((line) => line.replace(/^[ \t]*(?:[-*\u2022])[ \t]*/, '').replace(/\*\*/g, '').trim())
+    .filter(Boolean);
+  if (options.length === 0) return { body: text, options: [] };
+  return { body: text.slice(0, match.index).trimEnd(), options };
+}
+
 function AgentBubble({ content, sessionId, requestId, responseKind }: {
   content: string;
   sessionId?: string;
   requestId?: string;
   responseKind?: Message['response_kind'];
 }) {
+  const { body: contentBody, options: menuOptions } = useMemo(
+    () => extractClosingMenu(content),
+    [content],
+  );
+
   // Garante que opções A), B), C), D) e Referências fiquem em linhas separadas
   const formattedContent = useMemo(() => {
-    let text = content;
+    let text = contentBody;
 
     // Alguns modelos ocasionalmente devolvem as quatro alternativas na mesma
     // linha. Quando o conjunto A-D está presente, normalizamos a apresentação
@@ -116,7 +154,7 @@ function AgentBubble({ content, sessionId, requestId, responseKind }: {
       text = text.replace(/(\n- [^\n]+)\s+(?:•|-|\*)\s*(Refer[êe]ncia:)/gi, '$1\n- $2');
     }
     return text;
-  }, [content]);
+  }, [contentBody]);
 
   // Componentes customizados do ReactMarkdown
   const markdownComponents = useMemo(() => ({
@@ -190,6 +228,27 @@ function AgentBubble({ content, sessionId, requestId, responseKind }: {
           {formattedContent}
         </ReactMarkdown>
       </div>
+
+      {menuOptions.length > 0 && (
+        <div className="guapu-closing-menu">
+          <p className="guapu-closing-menu-title">Menu principal:</p>
+          <ul className="guapu-list">
+            {menuOptions.map((label) => (
+              <li key={label} className="list-none !pl-0 !ml-0">
+                <button
+                  type="button"
+                  onClick={() => dispatchOptionClick(label)}
+                  className="guapu-option-button"
+                >
+                  <MousePointerClick size={16} strokeWidth={1.8} aria-hidden="true" />
+                  <span>{label}</span>
+                  <ChevronRight size={14} strokeWidth={1.8} aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Componente de Avaliação Likert (1 a 5 Estrelas) — Exibido apenas em Resumos, Final de Quiz e Informações */}
       {shouldShowFeedback && <StarFeedbackRating sessionId={sessionId} requestId={requestId} />}

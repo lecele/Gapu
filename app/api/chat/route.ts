@@ -800,17 +800,61 @@ async function generateWithProvider(
   systemPrompt: string,
   prompt: string,
   maxOutputTokens: number,
+  thinkingBudget = 0,
 ): Promise<string> {
   if (candidate.provider === 'openai') return generateOpenAIResponse(candidate.name, systemPrompt, prompt, maxOutputTokens);
-  const result = await getGenAI().models.generateContent({
-    model: candidate.name,
-    contents: prompt,
-    config: {
-      systemInstruction: systemPrompt,
-      maxOutputTokens,
-      abortSignal: AbortSignal.timeout(MODEL_REQUEST_TIMEOUT_MS),
-    },
-  });
+
+  // thinkingBudget: 0 desliga o raciocinio interno do modelo.
+  //
+  // Nao e economia: e correcao de um bug de truncamento medido em producao em
+  // 09/09/2026. Os tokens de raciocinio do gemini-3.8-flash saem do MESMO
+  // orcamento de maxOutputTokens que a resposta visivel. Medido na API, com
+  // 1.200 de orcamento: thoughtsTokenCount=1.050, candidatesTokenCount=146,
+  // finishReason=MAX_TOKENS. O estudante recebia a resposta cortada no meio da
+  // palavra -- um Resumo parava em "durante episodios de confus" e uma consulta
+  // de Informacoes da Disciplina morria no primeiro subtitulo. O limite de 900
+  // -> 1.600 do quiz na v1.7.1 tratou o sintoma desta mesma causa.
+  //
+  // Com o raciocinio desligado, a mesma pergunta que truncava passou a caber
+  // com folga (1.325 tokens visiveis de 1.800) e a adesao as instrucoes nao
+  // piorou: o caso de citacao bibliografica -- o mais dificil da suite, o unico
+  // que exigiu troca de modelo -- continuou sendo respondido corretamente com
+  // thinkingBudget 0, 512 e automatico. Ou seja, a qualidade que fez este
+  // modelo ganhar a comparacao vem do modelo, nao do raciocinio extra.
+  const configBase = {
+    systemInstruction: systemPrompt,
+    maxOutputTokens,
+    abortSignal: AbortSignal.timeout(MODEL_REQUEST_TIMEOUT_MS),
+  };
+
+  let result;
+  try {
+    result = await getGenAI().models.generateContent({
+      model: candidate.name,
+      contents: prompt,
+      config: { ...configBase, thinkingConfig: { thinkingBudget } },
+    });
+  } catch (error: unknown) {
+    // Alguns modelos do Gemini nao permitem desligar o raciocinio e rejeitam o
+    // campo. Nesse caso vale mais responder com raciocinio ligado (e assumir o
+    // risco de truncar) do que falhar o turno inteiro.
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/thinking/i.test(message)) throw error;
+    console.warn(`[chat] ${candidate.name} rejeitou thinkingConfig; repetindo sem o campo`);
+    result = await getGenAI().models.generateContent({
+      model: candidate.name,
+      contents: prompt,
+      config: configBase,
+    });
+  }
+
+  // Truncamento nao pode voltar a passar silenciosamente: se acontecer de novo,
+  // por outro motivo, tem de aparecer no log em vez de chegar cortado ao aluno.
+  const finishReason = result.candidates?.[0]?.finishReason;
+  if (finishReason && String(finishReason).toUpperCase().includes('MAX_TOKENS')) {
+    console.warn(`[chat] resposta truncada por limite de tokens: modelo=${candidate.name} limite=${maxOutputTokens}`);
+  }
+
   return result.text ?? '';
 }
 
@@ -823,9 +867,36 @@ function maxOutputTokensForMode(mode: GenerationMode): number {
     // resposta anterior MAIS o enunciado seguinte com quatro alternativas.
     return 1_600;
   }
-  if (mode === 'info') return 1_200;
+  // Informacoes da Disciplina e a unica modalidade que raciocina (ver
+  // thinkingBudgetForMode): o orcamento tem de caber o raciocinio E a resposta,
+  // porque os dois saem do mesmo maxOutputTokens.
+  if (mode === 'info') return 3_200;
   if (mode === 'resumo' || mode === 'resumo_aprofundar') return 1_800;
   return 1_600;
+}
+
+/**
+ * Raciocinio interno do modelo (tokens de "thinking"), por modalidade.
+ *
+ * Zero na maioria das modalidades, por medicao: os tokens de raciocinio do
+ * gemini-3.8-flash saem do mesmo orcamento da resposta visivel, e com o
+ * raciocinio automatico ligado o Resumo chegava truncado no meio da palavra
+ * (thoughts=1.050 de 1.200, finishReason=MAX_TOKENS). Desligado, o Resumo
+ * completa os quatro paragrafos com folga, a suite de guardrails se manteve
+ * (DENTRO 7/7, PROVA 7/7, FORA 6/7) e a pergunta de citacao bibliografica --
+ * o caso mais dificil da suite -- continuou correta.
+ *
+ * Informacoes da Disciplina e a excecao, tambem por medicao (09/09/2026): com
+ * o raciocinio desligado o modelo desistia da pergunta "como e a avaliacao da
+ * disciplina?" em 3 de 5 tentativas, devolvendo uma unica linha ("Consultar o
+ * plano de ensino ... no Moodle") mesmo com as 5 fontes recuperadas em todas
+ * as tentativas -- ou seja, nao era falha de busca. E a unica modalidade que
+ * exige ler uma tabela de pesos e conferir soma aritmetica, exatamente a
+ * tarefa em que o prompt manda checar o calculo antes de responder, e a unica
+ * onde o raciocinio se paga.
+ */
+function thinkingBudgetForMode(mode: GenerationMode): number {
+  return mode === 'info' ? 1_024 : 0;
 }
 
 async function generateResponse(
@@ -901,6 +972,7 @@ async function generateResponse(
         systemPrompt,
         prompt,
         maxOutputTokensForMode(sessionMode),
+        thinkingBudgetForMode(sessionMode),
       );
 
       // Garante a presença do encerramento sem re-execução custosa. Na v1.7.0 o

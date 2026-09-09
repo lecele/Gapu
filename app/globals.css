@@ -842,6 +842,22 @@ button {
   color: var(--texto);
 }
 
+/* Menu curto de encerramento das modalidades estruturadas (v1.8.0). Separado
+   visualmente do corpo da resposta: o cliente relatou que o menu se misturava
+   ao conteudo, logo depois das Referencias, sem parecer um bloco de escolha. */
+.guapu-closing-menu {
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--borda);
+}
+
+.guapu-closing-menu-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--texto-suave, var(--texto));
+}
+
 .guapu-option-button {
   display: flex;
   width: 100%;
